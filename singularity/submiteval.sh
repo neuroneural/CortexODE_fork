@@ -18,7 +18,7 @@
 sleep 5s
 
 module load singularity/3.10.2
-singularity exec --nv --bind /data,/data/users2/washbee/hcp-plis-subj-pialnn/:/subj,/data/users2/washbee/speedrun/CortexODE_fork:/cortexode /data/users2/washbee/containers/speedrun/cortexODE_sr.sif /cortexode/singularity/eval.sh &
+singularity exec --nv --bind /data,/data/users2/washbee/hcp-plis-subj-pialnn/:/subj,/data/users2/washbee/speedrun/CortexODE_fork:/cortexode /data/users2/washbee/containers/arctest/arc_COde.sif /cortexode/singularity/eval.sh &
 
 wait
 
