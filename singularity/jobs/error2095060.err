@@ -1,0 +1,16 @@
+  0%|          | 0/2 [00:00<?, ?it/s]/opt/miniconda3/envs/cortexode/lib/python3.7/site-packages/torch/nn/functional.py:3063: UserWarning: Default upsampling behavior when mode=trilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode))
+ 50%|█████     | 1/2 [00:05<00:05,  5.47s/it] 50%|█████     | 1/2 [00:05<00:05,  5.47s/it]
+Traceback (most recent call last):
+  File "/home/users/washbee1/.local/lib/python3.7/site-packages/nibabel/loadsave.py", line 42, in load
+    stat_result = os.stat(filename)
+NotADirectoryError: [Errno 20] Not a directory: '/data/users2/washbee/speedrun/cortexode-data-rp/readme.txt/mri/orig.mgz'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "eval.py", line 139, in <module>
+    brain = nib.load(data_dir+subid+'/mri/orig.mgz')
+  File "/home/users/washbee1/.local/lib/python3.7/site-packages/nibabel/loadsave.py", line 44, in load
+    raise FileNotFoundError(f"No such file or no access: '{filename}'")
+FileNotFoundError: No such file or no access: '/data/users2/washbee/speedrun/cortexode-data-rp/readme.txt/mri/orig.mgz'

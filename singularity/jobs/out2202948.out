@@ -1,0 +1,68 @@
+segnet
+
+
+
+
+
+model size: 5.097MB
+
+
+
+
+
+wm model
+
+
+
+
+
+model size: 1.254MB
+
+
+
+
+
+gm model
+
+
+
+
+
+model size: 1.254MB
+
+
+
+
+
+subject_list ['201818'] 1
+total seconds for one batch is 4.869651
+0 - --load configuration--
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (99.21% free): 34359738368(total), 34089795584 (free), 269942784 (used)
+Max Memory occupied by tensors: 0
+Max Memory Cached: 0
+Current Memory occupied by tensors: 0
+Current Memory cached occupied by tensors: 0
+
+
+
+
+0 - --load models--
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (99.20% free): 34359738368(total), 34085994496 (free), 273743872 (used)
+Max Memory occupied by tensors: 0
+Max Memory Cached: 0
+Current Memory occupied by tensors: 0
+Current Memory cached occupied by tensors: 0
+
+
+
+
+0 - --start testing--
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (95.93% free): 34359738368(total), 32962969600 (free), 1396768768 (used)
+Max Memory occupied by tensors: 10698752
+Max Memory Cached: 27262976
+Current Memory occupied by tensors: 7981568
+Current Memory cached occupied by tensors: 27262976
+
+
+
+

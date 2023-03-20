@@ -2,23 +2,23 @@
 #SBATCH -n 1
 #SBATCH -c 4
 #SBATCH --mem=30g
-#SBATCH -p qTRDGPUH
-#SBATCH --gres=gpu:V100:1
+#SBATCH -p qTRDGPU
+#SBATCH --gres=gpu:RTX:1
 #SBATCH -t 1-00:00
 #SBATCH -J ctodeval
-#SBATCH -e /data/users2/washbee/cortexode/jobs/error%A.err
-#SBATCH -o /data/users2/washbee/cortexode/jobs/out%A.out
+#SBATCH -e jobs/error%A.err
+#SBATCH -o jobs/out%A.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=washbee1@student.gsu.edu
 #SBATCH --oversubscribe
-#SBATCH --exclude=arctrdgn002
+#SBATCH --exclude=arctrdgn002,arctrddgx001
 
 
 sleep 5s
 
 module load singularity/3.10.2
-singularity exec --nv --bind /data,/data/users2/washbee/hcp-plis-subj-pialnn/:/subj,/data/users2/washbee/speedrun/CortexODE_fork:/cortexode /data/users2/washbee/containers/arctest/arc_COde.sif /cortexode/singularity/eval.sh &
+singularity exec --nv --bind /data,/data/users2/washbee/speedrun/CortexODE_fork:/cortexode /data/users2/washbee/containers/speedrun/cortexODE_bm_sandbox/ /cortexode/singularity/eval.sh &
 
 wait
 

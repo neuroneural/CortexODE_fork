@@ -1,0 +1,133 @@
+
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (99.21% free): 34359738368(total), 34089795584 (free), 269942784 (used)
+Max Memory occupied by tensors: 0
+Max Memory Cached: 0
+Current Memory occupied by tensors: 0
+Current Memory cached occupied by tensors: 0
+
+segnet
+
+
+
+
+
+model size: 5.097MB
+
+
+
+
+
+wm model
+
+
+
+
+
+model size: 1.254MB
+
+
+
+
+
+gm model
+
+
+
+
+
+model size: 1.254MB
+
+
+
+
+
+subject_list ['201818'] 1
+before predict segmentation
+
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (95.86% free): 34359738368(total), 32937803776 (free), 1421934592 (used)
+Max Memory occupied by tensors: 33753600
+Max Memory Cached: 54525952
+Current Memory occupied by tensors: 33753600
+Current Memory cached occupied by tensors: 54525952
+
+after predict segmentation
+
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (87.83% free): 34359738368(total), 30177951744 (free), 4181786624 (used)
+Max Memory occupied by tensors: 2233178624
+Max Memory Cached: 2740977664
+Current Memory occupied by tensors: 162613760
+Current Memory cached occupied by tensors: 2740977664
+
+before wm surface
+
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (87.52% free): 34359738368(total), 30070996992 (free), 4288741376 (used)
+Max Memory occupied by tensors: 2233178624
+Max Memory Cached: 2740977664
+Current Memory occupied by tensors: 169909248
+Current Memory cached occupied by tensors: 2740977664
+
+before # inflate and smooth
+
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (87.49% free): 34359738368(total), 30062608384 (free), 4297129984 (used)
+Max Memory occupied by tensors: 2233178624
+Max Memory Cached: 2740977664
+Current Memory occupied by tensors: 359280640
+Current Memory cached occupied by tensors: 2740977664
+
+before # pial surface
+
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (87.49% free): 34359738368(total), 30060511232 (free), 4299227136 (used)
+Max Memory occupied by tensors: 2233178624
+Max Memory Cached: 2743074816
+Current Memory occupied by tensors: 360847872
+Current Memory cached occupied by tensors: 2743074816
+
+after # pial surface
+
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (87.49% free): 34359738368(total), 30060511232 (free), 4299227136 (used)
+Max Memory occupied by tensors: 2233178624
+Max Memory Cached: 2743074816
+Current Memory occupied by tensors: 548768256
+Current Memory cached occupied by tensors: 2743074816
+
+total seconds for one batch is 5.894737
+0 - --load configuration--
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (99.20% free): 34359738368(total), 34085994496 (free), 273743872 (used)
+Max Memory occupied by tensors: 0
+Max Memory Cached: 0
+Current Memory occupied by tensors: 0
+Current Memory cached occupied by tensors: 0
+
+
+
+
+0 - --load models--
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (99.20% free): 34359738368(total), 34085994496 (free), 273743872 (used)
+Max Memory occupied by tensors: 0
+Max Memory Cached: 0
+Current Memory occupied by tensors: 0
+Current Memory cached occupied by tensors: 0
+
+
+
+
+0 - --start testing--
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (95.94% free): 34359738368(total), 32965066752 (free), 1394671616 (used)
+Max Memory occupied by tensors: 10698752
+Max Memory Cached: 27262976
+Current Memory occupied by tensors: 7981568
+Current Memory cached occupied by tensors: 27262976
+
+
+
+
+0 - --END--
+Device 0: b'Tesla V100-SXM2-32GB', Memory : (87.49% free): 34359738368(total), 30060511232 (free), 4299227136 (used)
+Max Memory occupied by tensors: 2233178624
+Max Memory Cached: 2743074816
+Current Memory occupied by tensors: 542962688
+Current Memory cached occupied by tensors: 2743074816
+
+
+
+
