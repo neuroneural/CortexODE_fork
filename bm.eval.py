@@ -23,23 +23,45 @@ import datetime
 import time
 import nvidia_smi
 from csv import writer
+import socket
 
 nvidia_smi.nvmlInit()
 
 deviceCount = nvidia_smi.nvmlDeviceGetCount()
 
-def write_time2csv(model_name, t_sec, loading = False):
-    filename = ''
-    if loading is False:
-        filename='/speedrun/bm.events.csv'
+hostname = socket.gethostname()
+
+def write_time2csv(model_name, t_sec=None, subj=None, loading=False, memory=False, percentUsed=None, total=None, free=None, used=None):
+    base_path = '/speedrun/'
+
+    # Consolidate filename determination
+    if loading:
+        filename = 'bm.loading'
     else:
-        filename='/speedrun/bm.loading.csv'
-    List = [model_name, t_sec]
+        filename = 'bm.events'
+        
+    if memory:
+        filename += '.memory'
+
+    filename += '.csv'
+    filename = base_path + filename
+
+    # Define initial list
+    List = [model_name, t_sec, hostname, subj]
+    
+    # If memory flag is true, append memory related info
+    if memory:
+        List = [model_name, percentUsed, total, free, used, hostname, subj]
+
+    if not os.path.exists(filename):
+        # Create the file
+        with open(filename, 'w') as file:
+            # Perform any initial operations on the file, if needed
+            print("File created.")
+
     with open(filename, 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(List)
-        f_object.close()
-
 
 
 # Helper functions
@@ -57,22 +79,25 @@ def printModelSize(model):
     print('\n\n\n\n')
 
 
-def printSpaceUsage():
-    nvidia_smi.nvmlInit()
+def printSpaceUsage(info_flag = False):
     msgs = ""
     for i in range(deviceCount):
+        nvidia_smi.nvmlInit()
         handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
         info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
-        #print("Device {}: {}, Memory : ({:.2f}% free): {}(total), {} (free), {} (used)".format(i, nvidia_smi.nvmlDeviceGetName(handle), 100*info.free/info.total, info.total, info.free, info.used))
+        if info_flag:
+            return (100*info.free/info.total), info.total, info.free, info.used
+        
         msgs += '\n'
         msgs += "Device {}: {}, Memory : ({:.2f}% free): {}(total), {} (free), {} (used)".format(i, nvidia_smi.nvmlDeviceGetName(handle), 100*info.free/info.total, info.total, info.free, info.used)
         nvidia_smi.nvmlShutdown()
+
     msgs+="\nMax Memory occupied by tensors: "+ str(torch.cuda.max_memory_allocated(device=None))
     msgs+="\nMax Memory Cached: "+ str(torch.cuda.max_memory_cached(device=None))
     msgs+="\nCurrent Memory occupied by tensors: "+ str(torch.cuda.memory_allocated(device=None))
     msgs+="\nCurrent Memory cached occupied by tensors: "+str(torch.cuda.memory_cached(device=None))
     msgs+="\n"
-    return msgs
+    return str(msgs)
 
 # initialize topology correction
 topo_correct = topology()
@@ -242,10 +267,9 @@ if __name__ == '__main__':
     print("\n\n\nHow any subjects are getting predicted\n\n\n")
     print(len(subject_list))
     b = datetime.datetime.now()
-    t_sec = (b-a).total_seconds()
-
-    write_time2csv('CortexODE', t_sec, loading = True)
-    
+    write_time2csv('CortexODE', t_sec = (b-a).total_seconds(), loading=True)
+    percentUsed,total,free,used = printSpaceUsage(info_flag=True)
+    write_time2csv('CortexODE',percentUsed=percentUsed, total=total, free=free, used=used,loading=True,memory=True)
     for i in tqdm(range(len(subject_list))):
         a = datetime.datetime.now()
         subid = subject_list[i]
@@ -412,12 +436,12 @@ if __name__ == '__main__':
         GPU_msgs.append(stage + msgs + '\n\n\n')
 
         b = datetime.datetime.now()
-        t_sec = (b-a).total_seconds()
-        print('total seconds for one batch is {}'.format(t_sec))
-        
+        write_time2csv('CortexODE', t_sec = (b-a).total_seconds())
+        percentUsed,total,free,used = printSpaceUsage(info_flag=True)
+        write_time2csv('CortexODE',memory=True, percentUsed=percentUsed,total=total,free=free,used=used)
         #---------------writing time to a file-----------------
         # List that we want to add as a new row
-        write_time2csv("CortexODE", t_sec, loading = False)
+        #write_time2csv("CortexODE", t_sec, loading = False)
         # Open our existing CSV file in append mode
         # Create a file object for this file
         
