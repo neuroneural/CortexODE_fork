@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH -n 1
 #SBATCH -c 4
-#SBATCH --mem=60g
+#SBATCH --mem=90g
 #SBATCH -p qTRDGPUH
 #SBATCH --gres=gpu:V100:1
-#SBATCH -t 1-00:00
+#SBATCH -t 5-00:00
 #SBATCH -J ctodeval
 #SBATCH -e jobs/error%A.err
 #SBATCH -o jobs/out%A.out
@@ -18,8 +18,7 @@
 sleep 5s
 
 module load singularity/3.10.2
-singularity exec --nv --bind /data/users2/washbee/speedrun/:/speedrun,/data/users2/washbee/speedrun/CortexODE_fork:/cortexode /data/users2/washbee/containers/speedrun/cortexODE_bm_sandbox/ /cortexode/singularity/eval.sh &
-
+singularity exec --nv --bind /data/users2/washbee/speedrun/:/speedrun,/data/users2/washbee/speedrun/CortexODE_fork:/cortexode /data/users2/washbee/containers/speedrun/cortexODE_bm_sandbox/ /cortexode/singularity/train/trainsurfcontinue.sh &
 
 wait
 
