@@ -2,8 +2,8 @@
 #SBATCH -n 1
 #SBATCH -c 4
 #SBATCH --mem=30g
-#SBATCH -p qTRDGPUH
-#SBATCH --gres=gpu:V100:1
+#SBATCH -p qTRDGPU
+#SBATCH --gres=gpu:RTX:1
 #SBATCH -t 5-00:00
 #SBATCH -J ctoinitl
 #SBATCH -e jobs/error%A.err

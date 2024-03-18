@@ -17,6 +17,8 @@ from pytorch3d.ops import sample_points_from_meshes
 import logging
 from torchdiffeq import odeint_adjoint as odeint
 from config import load_config
+import re
+import os
 
 
 def train_seg(config):
@@ -60,6 +62,7 @@ def train_seg(config):
     # training model
     # --------------------------
     logging.info("start training ...")
+        
     for epoch in tqdm(range(n_epochs+1)):
         avg_loss = []
         for idx, data in enumerate(trainloader):
@@ -99,7 +102,7 @@ def train_seg(config):
                 logging.info("Dice score:{}".format(np.mean(avg_dice)))
                 logging.info('-------------------------------------')
         # save model checkpoints
-        if epoch % 20 == 0:
+        if epoch % 10 == 0:
             torch.save(segnet.state_dict(),
                        model_dir+'model_seg_'+data_name+'_'+tag+'_'+str(epoch)+'epochs.pt')
     # save final model
@@ -158,6 +161,35 @@ def train_surf(config):
                         level=logging.INFO, format='%(asctime)s %(message)s')
     
     # --------------------------
+    # initialize models
+    # --------------------------
+    logging.info("initalize model ...")
+    cortexode = CortexODE(dim_in=3, dim_h=C, kernel_size=K, n_scale=Q).to(device)
+    start_epoch = 0
+    model_path = None
+    
+    if config.model_file:
+        print('loading model',config.model_file)
+        print('hemi', config.surf_hemi)
+        print('surftype', config.surf_type)
+
+        match = re.search(r'(\d+)epochs', config.model_file)
+        start_epoch = int(match.group(1)) if match else 0
+        model_path = os.path.join(config.model_dir, config.model_file)
+        
+    # Load model state if a model path is provided
+    if model_path and os.path.isfile(model_path):
+        print('device', config.device)
+        cortexode.load_state_dict(torch.load(model_path, map_location=torch.device(config.device)))
+        print(f"Model loaded from {model_path}")
+    else:
+        print("No model file provided or file does not exist. Starting from scratch.")
+    
+    print('start epoch',start_epoch)
+    optimizer = optim.Adam(cortexode.parameters(), lr=lr)
+    T = torch.Tensor([0,1]).to(device)    # integration time interval for ODE
+
+    # --------------------------
     # load dataset
     # --------------------------
     logging.info("load dataset ...")
@@ -168,17 +200,11 @@ def train_surf(config):
     validloader = DataLoader(validset, batch_size=1, shuffle=False)
 
     # --------------------------
-    # initialize models
-    # --------------------------
-    logging.info("initalize model ...")
-    cortexode = CortexODE(dim_in=3, dim_h=C, kernel_size=K, n_scale=Q).to(device)
-    optimizer = optim.Adam(cortexode.parameters(), lr=lr)
-    T = torch.Tensor([0,1]).to(device)    # integration time interval for ODE
-
-    # --------------------------
     # training
     # --------------------------
+    
     logging.info("start training ...")
+    n_epochs = n_epochs - start_epoch
     for epoch in tqdm(range(n_epochs+1)):
         avg_loss = []
         for idx, data in enumerate(trainloader):
@@ -221,9 +247,9 @@ def train_surf(config):
             loss.backward()
             optimizer.step()
 
-        logging.info('epoch:{}, loss:{}'.format(epoch, np.mean(avg_loss)))
+        logging.info('epoch:{}, loss:{}'.format(start_epoch+epoch, np.mean(avg_loss)))
         
-        if epoch % 20 == 0:
+        if (start_epoch+epoch) % 10 == 0:
             logging.info('-------------validation--------------')
             with torch.no_grad():
                 valid_error = []
@@ -244,13 +270,13 @@ def train_surf(config):
                                    options=dict(step_size=step_size))[-1]
                     valid_error.append(1e3 * chamfer_distance(v_out, v_gt)[0].item())
                         
-                logging.info('epoch:{}, validation error:{}'.format(epoch, np.mean(valid_error)))
+                logging.info('epoch:{}, validation error:{}'.format(start_epoch+epoch, np.mean(valid_error)))
                 logging.info('-------------------------------------')
 
         # save model checkpoints 
-        if epoch % 20 == 0:
+        if (start_epoch+epoch) % 10 == 0:
             torch.save(cortexode.state_dict(), model_dir+'/model_'+surf_type+'_'+\
-                       data_name+'_'+surf_hemi+'_'+tag+'_'+str(epoch)+'epochs.pt')
+                       data_name+'_'+surf_hemi+'_'+tag+'_'+str(epoch+start_epoch)+'epochs.pt')
 
     # save the final model
     torch.save(cortexode.state_dict(), model_dir+'/model_'+surf_type+'_'+\
